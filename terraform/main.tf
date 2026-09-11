@@ -62,6 +62,15 @@ resource "aws_security_group" "devops_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # CI/CD Flask application
+  ingress {
+    description = "CI/CD Flask app"
+    from_port   = 8087
+    to_port     = 8087
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # Allow outbound traffic
   egress {
     from_port   = 0
