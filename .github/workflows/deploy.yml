@@ -1,0 +1,29 @@
+name: Deploy Python App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/Devs-python-project
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            PID=$(pgrep -f "python3 app.py" | head -n 1)
+            if [ -n "$PID" ]; then
+              kill $PID
+              sleep 2
+            fi
+            PORT=8087 nohup python3 app.py > app.log 2>&1 &
