@@ -23,7 +23,7 @@ jobs:
             pip install -r requirements.txt
             PID=$(pgrep -f "python3 app.py" | head -n 1)
             if [ -n "$PID" ]; then
-              kill $PID
-              sleep 2
+            kill $PID || true
+            sleep 2
             fi
             PORT=8087 nohup python3 app.py > app.log 2>&1 &
