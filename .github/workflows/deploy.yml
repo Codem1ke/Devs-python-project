@@ -21,7 +21,7 @@ jobs:
             git pull origin main
             source venv/bin/activate
             pip install -r requirements.txt
-            PID=$(pgrep -f "python3 app.py" | head -n 1)
+            PID=$(pgrep -f '^python3 app.py$' || true)
             if [ -n "$PID" ]; then
             kill $PID || true
             sleep 2
